@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import 'express-async-errors'
 import connectDB from './connectDB.js'
+import userRouter from './routes/userRoute.js'
+import propertyRouter from './routes/propertyRoute.js'
 dotenv.config()
 
 const app = express()
@@ -12,6 +14,8 @@ app.use(express.json({ limit: '50mb' }))
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
+app.use('/api/user', userRouter)
+app.use('/api/property', propertyRouter)
 const port = process.env.PORT || 5000
 const start = async () => {
   try {

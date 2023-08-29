@@ -1,11 +1,11 @@
-import express from 'express'
-import {
+const express = require('express')
+const {
   getAllProperties,
   addProperty,
   updateProperty,
   deleteProperty,
   findProperty,
-} from '../controllers/propertyController.js'
+} = require('../controllers/propertyController')
 const router = express.Router()
 
 router.route('/').get(getAllProperties).post(addProperty)
@@ -15,4 +15,4 @@ router
   .patch(updateProperty)
   .delete(deleteProperty)
 
-export default router
+module.exports = router

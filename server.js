@@ -1,13 +1,13 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import 'express-async-errors'
-import connectDB from './connectDB.js'
-import userRouter from './routes/userRoute.js'
-import propertyRouter from './routes/propertyRoute.js'
-import { errorHandler } from './middlewares/errorHandler.js'
-import { notFound } from './middlewares/notFound.js'
-dotenv.config()
+const express = require('express')
+const cors = require('cors')
+require('express-async-errors')
+const authRouter = require('./routes/authRoute')
+const userRouter = require('./routes/userRoute')
+const propertyRouter = require('./routes/propertyRoute')
+const connectDB = require('./connectDB.js')
+const notFound = require('./middlewares/notFound')
+const errorHandler = require('./middlewares/errorHandler')
+require('dotenv').config()
 
 const app = express()
 app.use(cors())
@@ -16,6 +16,7 @@ app.use(express.json({ limit: '50mb' }))
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
+app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/property', propertyRouter)
 app.use(notFound)

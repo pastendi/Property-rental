@@ -1,5 +1,5 @@
-import { StatusCodes } from 'http-status-codes'
-export const errorHandler = (err, req, res, next) => {
+const { StatusCodes } = require('http-status-codes')
+const errorHandler = (err, req, res, next) => {
   const error = {
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
     msg: err.message || 'Something went wrong, try again later',
@@ -20,3 +20,4 @@ export const errorHandler = (err, req, res, next) => {
   }
   res.status(error.statusCode).json({ msg: error.msg })
 }
+module.exports = errorHandler

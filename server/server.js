@@ -5,6 +5,8 @@ import 'express-async-errors'
 import connectDB from './connectDB.js'
 import userRouter from './routes/userRoute.js'
 import propertyRouter from './routes/propertyRoute.js'
+import { errorHandler } from './middlewares/errorHandler.js'
+import { notFound } from './middlewares/notFound.js'
 dotenv.config()
 
 const app = express()
@@ -16,6 +18,9 @@ app.get('/', (req, res) => {
 })
 app.use('/api/user', userRouter)
 app.use('/api/property', propertyRouter)
+app.use(notFound)
+app.use(errorHandler)
+
 const port = process.env.PORT || 5000
 const start = async () => {
   try {

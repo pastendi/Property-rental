@@ -13,7 +13,8 @@ const register = async (req, res) => {
   }
   const hashedPassword = bcrypt.hashSync(password, 10)
   const user = await User.create({ name, email, password: hashedPassword })
-  res.status(StatusCodes.CREATED).json({ user })
+  const { password: userPassword, ...rest } = user._doc
+  res.status(StatusCodes.CREATED).json({ user: rest })
 }
 const login = async (req, res) => {
   const { email, password } = req.body
@@ -22,10 +23,13 @@ const login = async (req, res) => {
   if (!isPasswordCorrect) {
     throw BadRequestError('Invalid credentials')
   }
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+  const { password: userPassword, ...rest } = user._doc
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_LIFETIME,
+  })
   res
     .cookie('token', token, { httpOnly: true })
     .status(StatusCodes.OK)
-    .json(user)
+    .json({ user: rest })
 }
 module.exports = { register, login }

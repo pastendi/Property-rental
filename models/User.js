@@ -16,7 +16,6 @@ const UserSchema = new mongoose.Schema(
         ref: 'Property',
       },
     ],
-    refreshToken: [String],
   },
   {
     timestamps: true,

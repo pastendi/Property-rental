@@ -1,35 +1,84 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/User.js')
-
-const jwt = require('jsonwebtoken')
+const Token = require('../models/Token.js')
 const { StatusCodes } = require('http-status-codes')
-const { BadRequestError } = require('../errors/index.js')
+const { BadRequestError, UnauthorizedError } = require('../errors/index.js')
+const {
+  createRefreshToken,
+  createAccessToken,
+  verifyRefreshToken,
+} = require('../utils/tokenUtils.js')
 
 const register = async (req, res) => {
   const { name, email, password } = req.body
   const alreadyExist = await User.findOne({ email })
   if (alreadyExist) {
-    throw BadRequestError('This email is already registered to another account')
+    throw new BadRequestError(
+      'This email is already registered to another account'
+    )
   }
   const hashedPassword = bcrypt.hashSync(password, 10)
-  const user = await User.create({ name, email, password: hashedPassword })
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+  })
+  const accessToken = createAccessToken(user._id)
+  const refreshToken = createRefreshToken(user._id)
+  await Token.create({ userId: user._id, accessToken, refreshToken })
   const { password: userPassword, ...rest } = user._doc
   res.status(StatusCodes.CREATED).json({ user: rest })
 }
+
 const login = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email }).select('+password')
   const isPasswordCorrect = bcrypt.compareSync(password, user.password)
   if (!isPasswordCorrect) {
-    throw BadRequestError('Invalid credentials')
+    throw new BadRequestError('Invalid credentials')
   }
-  const { password: userPassword, ...rest } = user._doc
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
+  const accessToken = createAccessToken(user._id)
+  const refreshToken = createRefreshToken(user._id)
+  const userToken = await Token.findOne({ userId: user._id })
+  userToken.refreshToken = [...userToken.refreshToken, refreshToken]
+  userToken.accessToken = accessToken
+  await userToken.save()
+  res.cookie('token', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    maxAge: 24 * 60 * 60 * 1000,
   })
-  res
-    .cookie('token', token, { httpOnly: true })
-    .status(StatusCodes.OK)
-    .json({ user: rest })
+  const { password: userPassword, ...rest } = user._doc
+  res.status(StatusCodes.OK).json({ user: rest, accessToken })
 }
-module.exports = { register, login }
+const manageToken = async (req, res) => {
+  const oldRefreshToken = req.cookies.token
+  if (!oldRefreshToken) {
+    throw new UnauthorizedError('Not authorized, please login')
+  }
+  res.clearCookie('token', { httpOnly: true, sameSite: 'None', secure: true })
+  const payload = verifyRefreshToken(oldRefreshToken)
+  const user = await User.findById(payload.id)
+  if (!user) {
+    throw new UnauthorizedError('Not authorized, please login')
+  }
+  let userToken = await Token.findOne({ userId: payload.id })
+  userToken.refreshToken = userToken.refreshToken.filter(
+    (rt) => rt !== oldRefreshToken
+  )
+
+  // renewing tokens
+  const accessToken = createAccessToken(user._id)
+  const refreshToken = createRefreshToken(user._id)
+  userToken.accessToken = accessToken
+  userToken.refreshToken = [...userToken.refreshToken, refreshToken]
+  await userToken.save()
+  res.cookie('token', refreshToken, {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+  })
+  res.status(StatusCodes.OK).json({ accessToken })
+}
+module.exports = { register, login, manageToken }

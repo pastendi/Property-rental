@@ -27,12 +27,21 @@ const register = async (req, res) => {
   const refreshToken = createRefreshToken(user._id)
   await Token.create({ userId: user._id, accessToken, refreshToken })
   const { password: userPassword, ...rest } = user._doc
-  res.status(StatusCodes.CREATED).json({ user: rest })
+  res.cookie('token', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+  res.status(StatusCodes.CREATED).json({ user: rest, accessToken })
 }
 
 const login = async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email }).select('+password')
+  if (!user) {
+    throw new BadRequestError('Invalid credentials')
+  }
   const isPasswordCorrect = bcrypt.compareSync(password, user.password)
   if (!isPasswordCorrect) {
     throw new BadRequestError('Invalid credentials')
@@ -52,6 +61,7 @@ const login = async (req, res) => {
   const { password: userPassword, ...rest } = user._doc
   res.status(StatusCodes.OK).json({ user: rest, accessToken })
 }
+
 const manageToken = async (req, res) => {
   const oldRefreshToken = req.cookies.token
   if (!oldRefreshToken) {

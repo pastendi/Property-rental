@@ -83,12 +83,23 @@ const manageToken = async (req, res) => {
   const refreshToken = createRefreshToken(user._id)
   userToken.accessToken = accessToken
   userToken.refreshToken = [...userToken.refreshToken, refreshToken]
+
   await userToken.save()
   res.cookie('token', refreshToken, {
     httpOnly: true,
     sameSite: 'None',
     secure: true,
   })
-  res.status(StatusCodes.OK).json({ accessToken })
+  res.status(StatusCodes.OK).json({ accessToken, user })
 }
-module.exports = { register, login, manageToken }
+const logout = async (req, res) => {
+  const token = req.cookies.token
+  const payload = verifyRefreshToken(token)
+  const userToken = await Token.findOne({ userId: payload.id })
+  userToken.refreshToken = userToken.refreshToken.filter((rt) => rt !== token)
+  userToken.accessToken = ''
+  userToken.save()
+  res.clearCookie('token', { httpOnly: true, sameSite: 'None', secure: true })
+  res.status(StatusCodes.OK).json({ msg: 'logout successful' })
+}
+module.exports = { register, login, manageToken, logout }

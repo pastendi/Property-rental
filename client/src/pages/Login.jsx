@@ -7,7 +7,6 @@ import Alert from '../components/Alert'
 
 const Login = () => {
   const currentUser = useSelector(selectCurrentUser)
-
   const navigate = useNavigate()
   if (currentUser) {
     navigate('/')

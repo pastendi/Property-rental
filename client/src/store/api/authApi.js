@@ -16,7 +16,14 @@ export const authApi = baseApi.injectEndpoints({
         body: { ...data },
       }),
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: '/auth/logout',
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
-export const { useLoginMutation, useRegisterMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
+  authApi

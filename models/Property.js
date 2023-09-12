@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const PropertySchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
@@ -25,6 +25,9 @@ const PropertySchema = new mongoose.Schema(
     photo: {
       type: String,
       required: true,
+    },
+    imageCloudinaryName: {
+      type: String,
     },
     agent: {
       type: mongoose.Schema.Types.ObjectId,

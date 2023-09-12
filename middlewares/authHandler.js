@@ -7,14 +7,13 @@ const auth = async (req, res, next) => {
     throw new BadRequestError('No access token on header')
   }
   const token = authHeader.split(' ')[1]
-  console.log(token)
-  const payload = verifyAccessToken(token)
-  if (!payload?.id) {
+  try {
+    const payload = verifyAccessToken(token)
+    req.userId = payload.id
+    next()
+  } catch (error) {
     throw new UnauthorizedError('Not authorized')
   }
-  req.userId = payload.id
-  console.log(payload.id)
-  next()
 }
 
 module.exports = auth

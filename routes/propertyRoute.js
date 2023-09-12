@@ -6,9 +6,15 @@ const {
   deleteProperty,
   findProperty,
 } = require('../controllers/propertyController')
+const uploadImage = require('../middlewares/uploadImage')
+const resizeImage = require('../middlewares/resizeImage')
+const auth = require('../middlewares/authHandler')
 const router = express.Router()
 
-router.route('/').get(getAllProperties).post(addProperty)
+router
+  .route('/')
+  .get(getAllProperties)
+  .post(auth, uploadImage.single('image'), resizeImage, addProperty)
 router
   .route('/:id')
   .get(findProperty)

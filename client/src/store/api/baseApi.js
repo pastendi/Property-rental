@@ -4,6 +4,7 @@ import { logout, setCredentials } from '../slice/authSlice'
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_BASE_URL,
   credentials: 'include',
+
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token
     if (token) {
@@ -14,9 +15,7 @@ const baseQuery = fetchBaseQuery({
 })
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions)
-  console.log(result)
-  if (result?.error?.originalStatus === 403) {
-    console.log('sending refresh token')
+  if (result?.error?.status === 403) {
     const res = await baseQuery('/auth/renewToken', api, extraOptions)
     if (res?.data) {
       api.dispatch(setCredentials({ ...res.data }))

@@ -12,7 +12,13 @@ const propertyApi = baseApi.injectEndpoints({
         }
       },
     }),
+    getProperty: builder.query({
+      query: () => ({
+        url: 'property',
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
-export const { useRegisterPropertyMutation } = propertyApi
+export const { useRegisterPropertyMutation, useGetPropertyQuery } = propertyApi

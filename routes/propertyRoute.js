@@ -13,7 +13,7 @@ const router = express.Router()
 
 router
   .route('/')
-  .get(getAllProperties)
+  .get(auth, getAllProperties)
   .post(auth, uploadImage.single('image'), resizeImage, addProperty)
 router
   .route('/:id')

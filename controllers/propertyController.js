@@ -6,7 +6,10 @@ const { cloudinaryUpload, cloudinaryDelete } = require('../utils/cloudinary')
 const removeTempImageFile = require('../utils/removeTempImageFile')
 require('dotenv').config()
 
-const getAllProperties = async (req, res) => {}
+const getAllProperties = async (req, res) => {
+  const properties = await Property.find({ agent: req.userId })
+  res.status(StatusCodes.OK).json({ properties })
+}
 const addProperty = async (req, res) => {
   const user = await User.findById(req.userId)
   if (!user) {

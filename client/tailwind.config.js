@@ -6,6 +6,7 @@ export default {
       colors: {
         primary: '#475BE8',
         whiteBg: '#F4F4F4',
+        light: '#808191',
       },
     },
   },

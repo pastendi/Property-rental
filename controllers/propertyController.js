@@ -7,7 +7,9 @@ const removeTempImageFile = require('../utils/removeTempImageFile')
 require('dotenv').config()
 
 const getAllProperties = async (req, res) => {
-  const properties = await Property.find({ agent: req.userId })
+  const properties = await Property.find({ agent: req.userId }).sort(
+    '-createdAt'
+  )
   res.status(StatusCodes.OK).json({ properties })
 }
 const addProperty = async (req, res) => {

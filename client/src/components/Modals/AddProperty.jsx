@@ -4,14 +4,13 @@ import Alert from '../Alert'
 import ModalLayout from './ModalLayout'
 import { useDispatch } from 'react-redux'
 import { closeRegisterPropertyModel } from '../../store/slice/appSlice'
+import Loading from '../Loading'
 
 const AddProperty = () => {
   const dispatch = useDispatch()
   const [registerProperty, { data, isError, error, isSuccess, isLoading }] =
     useRegisterPropertyMutation()
-  if (isSuccess) {
-    dispatch(closeRegisterPropertyModel())
-  }
+
   const [values, setValues] = useState({
     name: '',
     description: '',
@@ -23,7 +22,7 @@ const AddProperty = () => {
   const handleChange = ({ currentTarget: input }) => {
     setValues({ ...values, [input.name]: input.value })
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const form = new FormData()
     form.append('name', values.name)
@@ -32,8 +31,12 @@ const AddProperty = () => {
     form.append('location', values.location)
     form.append('image', values.image)
     form.append('price', values.price)
-    registerProperty(form)
+    const res = await registerProperty(form)
+    if (res.data) {
+      dispatch(closeRegisterPropertyModel())
+    }
   }
+
   const body = (
     <form onSubmit={handleSubmit}>
       <div className='flex flex-col space-y-4'>
@@ -42,7 +45,7 @@ const AddProperty = () => {
           <label className='font-semibold'>Name:</label>
           <input
             name='name'
-            className='flex-1 outline-none focus:border-sky-500 focus:border-[1px] p-1'
+            className='flex-1 outline-none focus:outline-sky-500 p-1'
             onChange={handleChange}
             value={values.name}
           />
@@ -50,7 +53,7 @@ const AddProperty = () => {
         <div className='flex space-x-2'>
           <label className='font-semibold'>Description:</label>
           <textarea
-            className='h-20 w-full outline-none focus:border-sky-500 focus:border-[1px] p-1'
+            className='h-20 w-full outline-none focus:outline-sky-500 p-1'
             name='description'
             value={values.description}
             onChange={handleChange}
@@ -60,7 +63,7 @@ const AddProperty = () => {
           <label className='font-semibold'>Type:</label>
           <input
             name='propertyType'
-            className='flex-1 outline-none focus:border-sky-500 focus:border-[1px] p-1'
+            className='flex-1 outline-none focus:outline-sky-500 p-1'
             onChange={handleChange}
             value={values.propertyType}
           />
@@ -69,7 +72,7 @@ const AddProperty = () => {
           <label className='font-semibold'>Location:</label>
           <input
             name='location'
-            className='flex-1 outline-none focus:border-sky-500 focus:border-[1px] p-1'
+            className='flex-1 outline-none focus:outline-sky-500  p-1'
             onChange={handleChange}
             value={values.location}
           />
@@ -78,7 +81,7 @@ const AddProperty = () => {
           <label className='font-semibold'>Price:</label>
           <input
             name='price'
-            className='flex-1 outline-none focus:border-sky-500 focus:border-[1px] p-1'
+            className='flex-1 outline-none focus:outline-sky-500  p-1'
             onChange={handleChange}
             value={values.price}
           />
@@ -96,10 +99,11 @@ const AddProperty = () => {
         <div className='flex justify-center'>
           <button
             type='submit'
-            className='btn bg-emerald-500'
+            className='btn bg-emerald-500 flex space-x-1 items-center'
             disabled={isLoading}
           >
-            Add Property
+            <h1>Add Property</h1>
+            {isLoading && <Loading />}
           </button>
         </div>
       </div>

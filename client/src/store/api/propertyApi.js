@@ -11,14 +11,25 @@ const propertyApi = baseApi.injectEndpoints({
         formData: true,
       }),
     }),
-    getProperty: builder.query({
+
+    getALLProperties: builder.query({
       providesTags: ['property'],
       query: () => ({
         url: 'property',
         method: 'GET',
       }),
     }),
+    getPropertyById: builder.query({
+      query: (id) => ({
+        url: `property/${id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
-export const { useRegisterPropertyMutation, useGetPropertyQuery } = propertyApi
+export const {
+  useRegisterPropertyMutation,
+  useGetALLPropertiesQuery,
+  useGetPropertyByIdQuery,
+} = propertyApi

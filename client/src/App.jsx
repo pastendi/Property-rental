@@ -7,6 +7,7 @@ import {
   Property,
   Register,
   Review,
+  SingleProperty,
 } from './pages'
 import PersistLogin from './pages/PersistLogin'
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path='/' element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path='/property' element={<Property />} />
+            <Route path='/property/:id' element={<SingleProperty />} />
             <Route path='/agent' element={<Agent />} />
             <Route path='/review' element={<Review />} />
           </Route>

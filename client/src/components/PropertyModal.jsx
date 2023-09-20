@@ -1,9 +1,11 @@
 import { IoLocationSharp } from 'react-icons/io5'
-const PropertyModal = ({ photo, name, location, price }) => {
+import { useNavigate } from 'react-router-dom'
+const PropertyModal = ({ _id, photo, name, location, price }) => {
+  const navigate = useNavigate()
   return (
-    <div className='w-full'>
+    <div className='w-full' onClick={() => navigate(`/property/${_id}`)}>
       <div className='w-full aspect-video bg-slate-400 rounded-xl overflow-hidden'>
-        <img src={photo} alt='' className='w-full h-full object-cover' />
+        <img src={photo} alt={name} />
       </div>
       <div className='w-full flex justify-between mt-2'>
         <div>

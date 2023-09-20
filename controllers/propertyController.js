@@ -37,7 +37,10 @@ const addProperty = async (req, res) => {
 }
 const updateProperty = async (req, res) => {}
 const deleteProperty = async (req, res) => {}
-const findProperty = async (req, res) => {}
+const findProperty = async (req, res) => {
+  const property = await Property.findById(req.params.id)
+  res.status(StatusCodes.OK).json({ property })
+}
 
 module.exports = {
   getAllProperties,

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+  img {
+    @apply w-full h-full object-cover;
+  }
   .nav-link {
     @apply flex items-center rounded-2xl space-x-2 text-xl pl-6 py-4 text-black font-bold hover:text-black hover:bg-primary hover:bg-opacity-20 transition-all duration-300;
   }

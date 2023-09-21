@@ -1,16 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../store/api/authApi'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCurrentUser, setCredentials } from '../store/slice/authSlice'
+import { isAuthenticated, setCredentials } from '../store/slice/authSlice'
 import Alert from '../components/Alert'
 
 const Login = () => {
-  const currentUser = useSelector(selectCurrentUser)
+  const isLoggedIn = useSelector(isAuthenticated)
   const navigate = useNavigate()
-  if (currentUser) {
-    navigate('/')
-  }
+
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -23,9 +21,16 @@ const Login = () => {
   }
   const handleLogin = async () => {
     const { user, accessToken } = await login(values).unwrap()
-    dispatch(setCredentials({ user, accessToken }))
+    if (accessToken) {
+      dispatch(setCredentials({ user, accessToken }))
+      navigate('/')
+    }
   }
-
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/')
+    }
+  }, [])
   return (
     <main className='w-screen h-screen relative'>
       <div className='absolute inset-0 flex items-center justify-center'>

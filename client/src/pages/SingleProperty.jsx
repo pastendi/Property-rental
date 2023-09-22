@@ -2,10 +2,13 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useGetPropertyByIdQuery } from '../store/api/propertyApi'
 import Loading from '../components/Loading'
 import { IoArrowBack } from 'react-icons/io5'
+import { useDispatch } from 'react-redux'
+import { openUpdatePropertyModel } from '../store/slice/appSlice'
 
 const SingleProperty = () => {
   const { id } = useParams()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { data, isFetching } = useGetPropertyByIdQuery(id)
   if (isFetching) return <Loading />
   const { name, description, propertyType, price, photo, location } =
@@ -44,7 +47,12 @@ const SingleProperty = () => {
             {`${location}`}
           </p>
           <div className='mt-10 flex space-x-4'>
-            <button className='btn bg-sky-600 hover:bg-sky-500'>Update</button>
+            <button
+              className='btn bg-sky-600 hover:bg-sky-500'
+              onClick={() => dispatch(openUpdatePropertyModel())}
+            >
+              Update
+            </button>
             <button className='btn bg-red-600 hover:bg-red-500'>Delete</button>
           </div>
         </div>

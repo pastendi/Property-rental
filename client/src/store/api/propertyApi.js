@@ -11,7 +11,15 @@ const propertyApi = baseApi.injectEndpoints({
         formData: true,
       }),
     }),
-
+    updateProperty: builder.mutation({
+      invalidatesTags: ['singleProperty'],
+      query: (data) => ({
+        url: 'property',
+        method: 'PATCH',
+        body: data,
+        formData: true,
+      }),
+    }),
     getALLProperties: builder.query({
       providesTags: ['property'],
       query: () => ({
@@ -20,6 +28,7 @@ const propertyApi = baseApi.injectEndpoints({
       }),
     }),
     getPropertyById: builder.query({
+      providesTags: ['singleProperty'],
       query: (id) => ({
         url: `property/${id}`,
         method: 'GET',
@@ -31,5 +40,6 @@ const propertyApi = baseApi.injectEndpoints({
 export const {
   useRegisterPropertyMutation,
   useGetALLPropertiesQuery,
+  useUpdatePropertyMutation,
   useGetPropertyByIdQuery,
 } = propertyApi

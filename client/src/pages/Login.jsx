@@ -32,7 +32,7 @@ const Login = () => {
     if (isLoggedIn) {
       navigate('/')
     }
-  }, [isLoggedIn])
+  }, [])
   return (
     <main className='w-screen h-screen relative'>
       <div className='absolute inset-0 flex items-center justify-center'>

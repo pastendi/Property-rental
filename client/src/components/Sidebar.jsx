@@ -1,18 +1,20 @@
 import React from 'react'
 import { GiReactor } from 'react-icons/gi'
 import { navLinks } from '../constants'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { BiLogOut } from 'react-icons/bi'
 import { useLogoutMutation } from '../store/api/authApi'
 import { useDispatch } from 'react-redux'
 import { logout } from '../store/slice/authSlice'
 const Sidebar = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [severLogout, { isFetching, isSuccess }] = useLogoutMutation()
   const handleLogout = () => {
     try {
       severLogout().then(() => {
         dispatch(logout())
+        navigate('/login')
       })
     } catch (error) {
       console.log(error)

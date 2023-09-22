@@ -10,15 +10,11 @@ const uploadImage = require('../middlewares/uploadImage')
 const resizeImage = require('../middlewares/resizeImage')
 const auth = require('../middlewares/authHandler')
 const router = express.Router()
-
+router.route('/:id').get(findProperty).delete(deleteProperty)
 router
   .route('/')
   .get(auth, getAllProperties)
   .post(auth, uploadImage.single('image'), resizeImage, addProperty)
-router
-  .route('/:id')
-  .get(findProperty)
-  .patch(updateProperty)
-  .delete(deleteProperty)
+  .patch(auth, uploadImage.single('image'), resizeImage, updateProperty)
 
 module.exports = router

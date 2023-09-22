@@ -35,7 +35,44 @@ const addProperty = async (req, res) => {
     throw new Error(error)
   }
 }
-const updateProperty = async (req, res) => {}
+const updateProperty = async (req, res) => {
+  const user = await User.findById(req.userId)
+  if (!user) {
+    throw new UnauthorizedError('Not authorized')
+  }
+  if (req.file) {
+    const storagePath = `temp/${req.file?.fileName}`
+    const upload = await cloudinaryUpload(storagePath)
+    if (upload) {
+      removeTempImageFile(storagePath)
+    }
+    try {
+      const property = await Property.findByIdAndUpdate(
+        req.body.id,
+        {
+          ...req.body,
+          photo: upload?.url,
+          imageCloudinaryName: upload?.cloudinaryName,
+        },
+        { runValidators: true }
+      )
+      res.status(StatusCodes.OK).json({ property })
+      await cloudinaryDelete(property.imageCloudinaryName)
+    } catch (error) {
+      await cloudinaryDelete(upload.cloudinaryName)
+      throw new Error(error)
+    }
+  } else {
+    const property = await Property.findByIdAndUpdate(
+      req.body.id,
+      {
+        ...req.body,
+      },
+      { runValidators: true }
+    )
+    res.status(StatusCodes.OK).json({ property })
+  }
+}
 const deleteProperty = async (req, res) => {}
 const findProperty = async (req, res) => {
   const property = await Property.findById(req.params.id)
@@ -45,7 +82,7 @@ const findProperty = async (req, res) => {
 module.exports = {
   getAllProperties,
   addProperty,
-  updateProperty,
   deleteProperty,
   findProperty,
+  updateProperty,
 }

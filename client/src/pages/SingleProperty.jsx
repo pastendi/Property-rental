@@ -3,7 +3,10 @@ import { useGetPropertyByIdQuery } from '../store/api/propertyApi'
 import Loading from '../components/Loading'
 import { IoArrowBack } from 'react-icons/io5'
 import { useDispatch } from 'react-redux'
-import { openUpdatePropertyModel } from '../store/slice/appSlice'
+import {
+  openDeletePropertyModel,
+  openUpdatePropertyModel,
+} from '../store/slice/appSlice'
 
 const SingleProperty = () => {
   const { id } = useParams()
@@ -53,7 +56,12 @@ const SingleProperty = () => {
             >
               Update
             </button>
-            <button className='btn bg-red-600 hover:bg-red-500'>Delete</button>
+            <button
+              className='btn bg-red-600 hover:bg-red-500'
+              onClick={() => dispatch(openDeletePropertyModel())}
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>

@@ -73,7 +73,12 @@ const updateProperty = async (req, res) => {
     res.status(StatusCodes.OK).json({ property })
   }
 }
-const deleteProperty = async (req, res) => {}
+const deleteProperty = async (req, res) => {
+  const property = await Property.findById(req.params.id)
+  await cloudinaryDelete(property.imageCloudinaryName)
+  await property.deleteOne()
+  res.status(StatusCodes.OK).json({ property })
+}
 const findProperty = async (req, res) => {
   const property = await Property.findById(req.params.id)
   res.status(StatusCodes.OK).json({ property })

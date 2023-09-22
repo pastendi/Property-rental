@@ -3,7 +3,7 @@ import { baseApi } from './baseApi'
 const propertyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     registerProperty: builder.mutation({
-      invalidatesTags: ['property'],
+      invalidatesTags: ['properties'],
       query: (data) => ({
         url: 'property',
         method: 'POST',
@@ -12,7 +12,7 @@ const propertyApi = baseApi.injectEndpoints({
       }),
     }),
     updateProperty: builder.mutation({
-      invalidatesTags: ['singleProperty'],
+      invalidatesTags: ['singleProperty', 'properties'],
       query: (data) => ({
         url: 'property',
         method: 'PATCH',
@@ -21,7 +21,7 @@ const propertyApi = baseApi.injectEndpoints({
       }),
     }),
     getALLProperties: builder.query({
-      providesTags: ['property'],
+      providesTags: ['properties'],
       query: () => ({
         url: 'property',
         method: 'GET',
@@ -34,6 +34,13 @@ const propertyApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    removePropertyById: builder.mutation({
+      invalidatesTags: ['properties'],
+      query: (id) => ({
+        url: `property/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
@@ -42,4 +49,5 @@ export const {
   useGetALLPropertiesQuery,
   useUpdatePropertyMutation,
   useGetPropertyByIdQuery,
+  useRemovePropertyByIdMutation,
 } = propertyApi

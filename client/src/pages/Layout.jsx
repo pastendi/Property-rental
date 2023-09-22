@@ -2,16 +2,19 @@ import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import { Outlet } from 'react-router-dom'
 import {
+  showDeletePropertyModal,
   showRegisterPropertyModal,
   showUpdatePropertyModal,
 } from '../store/slice/appSlice'
 import AddProperty from '../components/Modals/AddProperty'
 import { useSelector } from 'react-redux'
 import UpdateProperty from '../components/Modals/UpdateProperty'
+import DeleteProperty from '../components/Modals/DeleteProperty'
 
 const Layout = () => {
   const propertyRegistrationModal = useSelector(showRegisterPropertyModal)
-  const propertyUpdateModel = useSelector(showUpdatePropertyModal)
+  const propertyUpdateModal = useSelector(showUpdatePropertyModal)
+  const propertyRemoveModal = useSelector(showDeletePropertyModal)
   return (
     <>
       <div className='w-full h-full flex'>
@@ -28,7 +31,8 @@ const Layout = () => {
         </div>
       </div>
       {propertyRegistrationModal && <AddProperty />}
-      {propertyUpdateModel && <UpdateProperty />}
+      {propertyUpdateModal && <UpdateProperty />}
+      {propertyRemoveModal && <DeleteProperty />}
     </>
   )
 }

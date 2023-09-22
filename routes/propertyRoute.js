@@ -10,7 +10,7 @@ const uploadImage = require('../middlewares/uploadImage')
 const resizeImage = require('../middlewares/resizeImage')
 const auth = require('../middlewares/authHandler')
 const router = express.Router()
-router.route('/:id').get(findProperty).delete(deleteProperty)
+router.route('/:id').get(auth, findProperty).delete(auth, deleteProperty)
 router
   .route('/')
   .get(auth, getAllProperties)

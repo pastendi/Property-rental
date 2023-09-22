@@ -107,7 +107,7 @@ const UpdateProperty = () => {
         <div className='flex justify-center'>
           <button
             type='submit'
-            className='btn bg-sky-500 flex space-x-1 items-center'
+            className='btn bg-sky-500 '
             disabled={isLoading}
           >
             {isLoading ? <span>Updating</span> : <span>Update Property</span>}

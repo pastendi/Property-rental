@@ -10,6 +10,6 @@
     @apply flex items-center rounded-2xl space-x-2 text-xl pl-6 py-4 text-black font-bold hover:text-black hover:bg-primary hover:bg-opacity-20 transition-all duration-300;
   }
   .btn {
-    @apply px-4 py-1 rounded-lg text-white text-lg font-semibold capitalize;
+    @apply px-4 py-1 rounded-lg text-white text-lg font-semibold capitalize flex justify-center items-center space-x-2;
   }
 }

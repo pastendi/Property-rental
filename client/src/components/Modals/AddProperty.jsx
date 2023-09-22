@@ -100,7 +100,7 @@ const AddProperty = () => {
         <div className='flex justify-center'>
           <button
             type='submit'
-            className='btn bg-emerald-500 flex space-x-1 items-center'
+            className='btn bg-emerald-500 '
             disabled={isLoading}
           >
             {isLoading ? <span>Adding</span> : <span>Add Property</span>}

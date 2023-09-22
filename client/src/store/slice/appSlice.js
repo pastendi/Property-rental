@@ -5,6 +5,7 @@ const appSlice = createSlice({
   initialState: {
     showRegisterPropertyModal: false,
     showUpdatePropertyModal: false,
+    showDeletePropertyModal: false,
   },
   reducers: {
     openRegisterPropertyModel: (state, action) => {
@@ -19,6 +20,12 @@ const appSlice = createSlice({
     closeUpdatePropertyModel: (state, action) => {
       state.showUpdatePropertyModal = false
     },
+    openDeletePropertyModel: (state, action) => {
+      state.showDeletePropertyModal = true
+    },
+    closeDeletePropertyModel: (state, action) => {
+      state.showDeletePropertyModal = false
+    },
   },
 })
 export const {
@@ -26,9 +33,13 @@ export const {
   closeRegisterPropertyModel,
   openUpdatePropertyModel,
   closeUpdatePropertyModel,
+  openDeletePropertyModel,
+  closeDeletePropertyModel,
 } = appSlice.actions
 export const appReducer = appSlice.reducer
 export const showRegisterPropertyModal = (state) =>
   state.app.showRegisterPropertyModal
 export const showUpdatePropertyModal = (state) =>
   state.app.showUpdatePropertyModal
+export const showDeletePropertyModal = (state) =>
+  state.app.showDeletePropertyModal

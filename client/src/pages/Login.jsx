@@ -4,6 +4,7 @@ import { useLoginMutation } from '../store/api/authApi'
 import { useDispatch, useSelector } from 'react-redux'
 import { isAuthenticated, setCredentials } from '../store/slice/authSlice'
 import Alert from '../components/Alert'
+import toast from 'react-hot-toast'
 
 const Login = () => {
   const isLoggedIn = useSelector(isAuthenticated)
@@ -24,13 +25,14 @@ const Login = () => {
     if (accessToken) {
       dispatch(setCredentials({ user, accessToken }))
       navigate('/')
+      toast.success('Login successful')
     }
   }
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/')
     }
-  }, [])
+  }, [isLoggedIn])
   return (
     <main className='w-screen h-screen relative'>
       <div className='absolute inset-0 flex items-center justify-center'>

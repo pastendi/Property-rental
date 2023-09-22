@@ -5,6 +5,7 @@ import ModalLayout from './ModalLayout'
 import { useDispatch } from 'react-redux'
 import { closeRegisterPropertyModel } from '../../store/slice/appSlice'
 import Loading from '../Loading'
+import toast from 'react-hot-toast'
 
 const AddProperty = () => {
   const dispatch = useDispatch()
@@ -33,10 +34,10 @@ const AddProperty = () => {
     form.append('price', values.price)
     const res = await registerProperty(form)
     if (res.data) {
+      toast.success('New property added')
       dispatch(closeRegisterPropertyModel())
     }
   }
-
   const body = (
     <form onSubmit={handleSubmit}>
       <div className='flex flex-col space-y-4'>
@@ -63,7 +64,7 @@ const AddProperty = () => {
           <label className='font-semibold'>Type:</label>
           <input
             name='propertyType'
-            className='flex-1 outline-none focus:outline-sky-500 p-1'
+            className='flex-1 outline-none focus:outline-sky-500  p-1'
             onChange={handleChange}
             value={values.propertyType}
           />
@@ -102,7 +103,7 @@ const AddProperty = () => {
             className='btn bg-emerald-500 flex space-x-1 items-center'
             disabled={isLoading}
           >
-            <h1>Add Property</h1>
+            {isLoading ? <span>Adding</span> : <span>Add Property</span>}
             {isLoading && <Loading />}
           </button>
         </div>

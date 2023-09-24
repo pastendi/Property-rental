@@ -5,9 +5,11 @@ import {
   Dashboard,
   Layout,
   Login,
+  Profile,
   Property,
   Register,
   Review,
+  Setting,
   SingleProperty,
 } from './pages'
 import PersistLogin from './pages/PersistLogin'
@@ -17,6 +19,8 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route element={<PersistLogin />}>
             <Route path='/' element={<Layout />}>
               <Route index element={<Dashboard />} />
@@ -24,10 +28,10 @@ function App() {
               <Route path='/property/:id' element={<SingleProperty />} />
               <Route path='/agent' element={<Agent />} />
               <Route path='/review' element={<Review />} />
+              <Route path='/setting' element={<Setting />} />
+              <Route path='/profile' element={<Profile />} />
             </Route>
           </Route>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
         </Routes>
       </BrowserRouter>
     </>

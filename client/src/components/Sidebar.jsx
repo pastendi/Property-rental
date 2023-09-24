@@ -1,25 +1,8 @@
 import React from 'react'
 import { GiReactor } from 'react-icons/gi'
 import { navLinks } from '../constants'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { BiLogOut } from 'react-icons/bi'
-import { useLogoutMutation } from '../store/api/authApi'
-import { useDispatch } from 'react-redux'
-import { logout } from '../store/slice/authSlice'
+import { NavLink } from 'react-router-dom'
 const Sidebar = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const [severLogout, { isFetching, isSuccess }] = useLogoutMutation()
-  const handleLogout = () => {
-    try {
-      severLogout().then(() => {
-        dispatch(logout())
-        navigate('/login')
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
   return (
     <div className='fixed top-0 left-0 w-72 h-full p-4 '>
       <div className='w-full h-full relative'>
@@ -48,17 +31,6 @@ const Sidebar = () => {
             )
           })}
         </menu>
-        <div className='absolute bottom-4 right-4'>
-          <button
-            className='btn text-black flex justify-center items-center space-x-1 hover:bg-gray-200'
-            onClick={handleLogout}
-          >
-            <span>
-              <BiLogOut size={24} />
-            </span>
-            <span>logout</span>
-          </button>
-        </div>
       </div>
     </div>
   )

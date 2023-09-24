@@ -67,9 +67,14 @@ const Register = () => {
               onChange={handleChange}
               className='w-full rounded outline-none px-2 py-1 text-lg'
             />
-            <button className='btn bg-sky-600' onClick={() => handleRegister()}>
-              Register
-            </button>
+            <div className='flex justify-center'>
+              <button
+                className='btn bg-sky-600'
+                onClick={() => handleRegister()}
+              >
+                Register
+              </button>
+            </div>
             <p>
               I Already have account{' '}
               <span

@@ -58,12 +58,14 @@ const Login = () => {
               onChange={handleChange}
               className='w-full rounded outline-none px-2 py-1 text-lg'
             />
-            <button
-              className='btn bg-emerald-500'
-              onClick={() => handleLogin()}
-            >
-              Login
-            </button>
+            <div className='flex justify-center'>
+              <button
+                className='btn bg-emerald-500'
+                onClick={() => handleLogin()}
+              >
+                Login
+              </button>
+            </div>
             <p>
               New here?{' '}
               <span

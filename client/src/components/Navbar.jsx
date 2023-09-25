@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, selectCurrentUser } from '../store/slice/authSlice'
-import { IoNotificationsOutline } from 'react-icons/io5'
+import { IoNotificationsOutline, IoSearchSharp } from 'react-icons/io5'
 import { CiWallet } from 'react-icons/ci'
 import { useEffect, useRef, useState } from 'react'
 import { accountOptions } from '../constants'
@@ -9,6 +9,7 @@ import { useLogoutMutation } from '../store/api/authApi'
 import { Link } from 'react-router-dom'
 const Navbar = () => {
   const dispatch = useDispatch()
+  const [newNotification, setNewNotification] = useState(true)
   const [showAccount, setShowAccount] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
@@ -22,6 +23,9 @@ const Navbar = () => {
     setShowAccount((prev) => !prev)
   }
   const toggleShowNotification = () => {
+    if (newNotification) {
+      setNewNotification(false)
+    }
     if (showAccount) {
       setShowAccount(false)
     }
@@ -56,20 +60,25 @@ const Navbar = () => {
   return (
     <div className='w-full pl-72 h-full bg-white pr-4'>
       <div className='w-full h-full px-4 flex flex-row justify-between items-center'>
-        <div>
+        <div className='flex items-center space-x-1 w-64 bg-gray-100 px-3 py-1 rounded-md'>
+          <IoSearchSharp />
           <input
             type='text'
-            placeholder='search'
-            className='w-64 bg-gray-100 px-3 py-1 rounded-md outline-none'
+            placeholder='Search'
+            className='flex-1 bg-transparent outline-none'
           />
         </div>
         <div className='flex space-x-3 relative'>
-          <div
-            className='flex justify-center items-center text-3xl relative cursor-pointer '
-            onClick={toggleShowNotification}
-          >
-            <IoNotificationsOutline />
-            <div className='absolute top-2.5 right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full'></div>
+          <div className='flex justify-center items-center text-3xl relative  '>
+            <IoNotificationsOutline
+              className='cursor-pointer'
+              onClick={toggleShowNotification}
+            />
+            <div
+              className={`${
+                !newNotification && 'hidden'
+              } absolute top-2.5 right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full`}
+            ></div>
           </div>
           <div
             className='flex space-x-1 items-center cursor-pointer'

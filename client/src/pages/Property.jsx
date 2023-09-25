@@ -21,7 +21,7 @@ const Property = () => {
   return (
     <div>
       <header className='flex justify-between'>
-        <div>Property</div>
+        <div className='text-2xl font-semibold'>Property</div>
         <button
           className='btn bg-blue-600 flex items-center space-x-2'
           onClick={() => dispatch(openRegisterPropertyModel())}

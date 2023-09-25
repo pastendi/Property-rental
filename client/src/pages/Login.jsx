@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../store/api/authApi'
 import { useDispatch, useSelector } from 'react-redux'
-import { isAuthenticated, setCredentials } from '../store/slice/authSlice'
+import {
+  isAuthenticated,
+  selectCurrentUser,
+  setCredentials,
+} from '../store/slice/authSlice'
 import Alert from '../components/Alert'
 import toast from 'react-hot-toast'
 
 const Login = () => {
-  const isLoggedIn = useSelector(isAuthenticated)
+  const user = useSelector(selectCurrentUser)
   const navigate = useNavigate()
 
   const [values, setValues] = useState({
@@ -29,7 +33,7 @@ const Login = () => {
     }
   }
   useEffect(() => {
-    if (isLoggedIn) {
+    if (user) {
       navigate('/')
     }
   }, [])
